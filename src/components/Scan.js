@@ -18,31 +18,32 @@ const defaultValues = {
 };
 
 export default function Scan() {
-  const [open, setOpen] = React.useState(false);
-  const [data, setData] = React.useState(defaultValues);
-  const {loading, data: fetched} = useBarcode(data.upc);
+	const [open, setOpen] = React.useState(false);
+	const [data, setData] = React.useState(defaultValues);
+	const {loading, data: fetched} = useBarcode(data.upc);
 
 
-  React.useEffect(() => {
-	if (fetched) {
-		setData({...data, ...fetched});
-	}
-	return () => setData(defaultValues);
-  }, [fetched, setData]);
+	React.useEffect(() => {
+		if (fetched) {
+			setData({...data, ...fetched});
+		}
+		return () => setData(defaultValues);
+	}, [fetched, setData]);
 
-  const handleChange = React.useCallback(({target}) => {
-    setData({...data, [target.name]: target.value});
-  }, [data]);
+	const handleChange = React.useCallback(({target}) => {
+		setData({...data, [target.name]: target.value});
+	}, [data]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+	const handleClose = () => {
+		setOpen(false);
+		setData(defaultValues);
+ 	};
 
-  const handleScan = React.useCallback((decodedText, decodedResult) => {
+	const handleScan = React.useCallback((decodedText, decodedResult) => {
 		if (decodedText) {
 			setData({upc: decodedText});
 		}
@@ -65,12 +66,12 @@ export default function Scan() {
 		);
 	}, [handleScanError, handleScan]);
 
-  const handleAdd = React.useCallback(async (event) => {
-	event.preventDefault();
-	await add(data);
-	setOpen(false);
-	setData({});
-  }, [data]);
+	const handleAdd = React.useCallback(async (event) => {
+		event.preventDefault();
+		await add(data);
+		setOpen(false);
+		setData({});
+	}, [data]);
 
 	return (
 		<div>

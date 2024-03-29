@@ -20,12 +20,10 @@ export default function useBarcode(barcode) {
 			return response.json();
 		  })
 		  .then(({product}) => {
-			debugger;
 			const result = {
 				image: product?.image_front_small_url,
 				name: product?.product_name,
 			};
-		debugger;
 			setData(result);
 		  });
 
