@@ -6,29 +6,37 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import {defaultValues} from './Scan';
+import useBarcode from '../hooks/useBarcode';
 import {add} from '../db';
 
 export default function Add(props) {
-  const [open, setOpen] = React.useState(false);
-  const [data, setData] = React.useState({});
+	const [open, setOpen] = React.useState(false);
+	const [data, setData] = React.useState({});
+	const [upc, setUpc] = React.useState();
+	const {loading} = useBarcode(upc, setData);
 
-  const handleChange = React.useCallback(({target}) => {
-    setData({...data, [target.name]: target.value});
-  }, [data]);
+	const handleChange = React.useCallback(({target}) => {
+		setData({...data, [target.name]: target.value});
+	}, [data]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+	const handleCheck = () => {
+		setUpc(data.upc);
+	};
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
 
-  const handleAdd = React.useCallback(async  () => {
-	await add(data);
-	setOpen(false);
-	setData({});
-  }, [data]);
+	const handleClose = () => {
+		setOpen(false);
+		setData(defaultValues);
+	};
+
+	const handleAdd = React.useCallback(async  () => {
+		await add(data);
+		handleClose();
+	}, [data]);
 
 	return (
 		<div>
@@ -48,6 +56,7 @@ export default function Add(props) {
 					label="Name"
 					fullWidth
 					variant="outlined"
+					value={data.name}
 					onChange={handleChange}
 				/>
 				<TextField
@@ -80,6 +89,8 @@ export default function Add(props) {
 					variant="outlined"
 					onChange={handleChange}
 				/>
+				<Button disabled={loading} onClick={handleCheck}>Check</Button>
+				{data.image && <img src={data.image }/>}
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>

@@ -10,7 +10,7 @@ import Barcode, {ScanType} from './Barcode';
 import useBarcode from '../hooks/useBarcode';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const defaultValues = {
+export const defaultValues = {
 	bestBefore: '',
 	name: '',
 	quantity: 1,
