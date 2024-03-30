@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useBarcode(barcode) {
+export default function useBarcode(barcode, onChange) {
 	const [loading, setLoading] = React.useState(false);
 	const [data, setData] = React.useState(null);
 
@@ -25,6 +25,7 @@ export default function useBarcode(barcode) {
 				name: product?.product_name,
 			};
 			setData(result);
+			onChange((data) => ({...data, ...result}));
 		  });
 
 

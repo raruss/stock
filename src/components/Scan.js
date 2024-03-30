@@ -20,15 +20,7 @@ const defaultValues = {
 export default function Scan() {
 	const [open, setOpen] = React.useState(false);
 	const [data, setData] = React.useState(defaultValues);
-	const {loading, data: fetched} = useBarcode(data.upc);
-
-
-	React.useEffect(() => {
-		if (fetched) {
-			setData({...data, ...fetched});
-		}
-		return () => setData(defaultValues);
-	}, [fetched, setData]);
+	const {loading} = useBarcode(data.upc, setData);
 
 	const handleChange = React.useCallback(({target}) => {
 		setData({...data, [target.name]: target.value});
@@ -43,9 +35,9 @@ export default function Scan() {
 		setData(defaultValues);
  	};
 
-	const handleScan = React.useCallback((decodedText, decodedResult) => {
+	const handleScan = React.useCallback((decodedText) => {
 		if (decodedText) {
-			setData({upc: decodedText});
+			setData({...defaultValues, upc: decodedText});
 		}
 	}, []);
 
@@ -70,9 +62,8 @@ export default function Scan() {
 		event.preventDefault();
 		await add(data);
 		setOpen(false);
-		setData({});
+		setData(defaultValues);
 	}, [data]);
-
 	return (
 		<div>
 			<Button variant="outlined" onClick={handleClickOpen}>
