@@ -16,6 +16,7 @@ import Edit from './Edit';
 export default function Grid({items = []}) {
 	const [edit, setEdit] = React.useState();
 	items.sort(({bestBefore: a}, {bestBefore: b}) => compareAsc(new Date(a), new Date(b)));
+	const products = items.slice(0, 10);
 
 	const handleDelete = React.useCallback((idx) => () => {
 		const item = items[idx];
@@ -50,7 +51,7 @@ export default function Grid({items = []}) {
 					</TableRow>
 					</TableHead>
 					<TableBody>
-					{items?.map((row, idx) => (
+					{products?.map((row, idx) => (
 						<TableRow
 							key={row.name}
 							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
