@@ -22,6 +22,7 @@ import type { ItemDraft } from '../../db/items';
 import { CATEGORY_LABELS, LOCATION_LABELS, UNIT_LABELS } from '../../i18n';
 import { useProductLookup } from '../../hooks/useProductLookup';
 import { ProductImage } from './ProductImage';
+import { ExpiryQuickPicker } from './ExpiryQuickPicker';
 
 interface Props {
   open: boolean;
@@ -210,16 +211,24 @@ export function ItemFormDialog({ open, mode, initial, onSubmit, onClose }: Props
               </TextField>
             </Stack>
 
-            <TextField
-              label="Термін придатності"
-              type="date"
-              value={form.bestBefore ?? ''}
-              // Порожня дата зберігається як null, а не як '' — саме порожній рядок
-              // валив старий застосунок на `format(new Date(''))`.
-              onChange={(e) => set('bestBefore', e.target.value || null)}
-              InputLabelProps={{ shrink: true }}
-              helperText="Можна не вказувати"
-            />
+            <Stack spacing={1}>
+              <TextField
+                label="Термін придатності"
+                type="date"
+                value={form.bestBefore ?? ''}
+                // Порожня дата зберігається як null, а не як '' — саме порожній рядок
+                // валив старий застосунок на `format(new Date(''))`.
+                onChange={(e) => set('bestBefore', e.target.value || null)}
+                InputLabelProps={{ shrink: true }}
+                helperText="Можна не вказувати"
+              />
+              <ExpiryQuickPicker
+                value={form.bestBefore}
+                upc={form.upc}
+                category={form.category}
+                onChange={(bestBefore) => set('bestBefore', bestBefore)}
+              />
+            </Stack>
 
             <Stack direction="row" spacing={2}>
               <TextField
